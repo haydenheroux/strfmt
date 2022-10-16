@@ -57,3 +57,19 @@ func TestOnlyUnicode(t *testing.T) {
     t.Errorf("got: %s, want: %s", got, want)
   }
 }
+
+func TestSlice(t *testing.T) {
+  got := CleanSlice([]string{"One", "Two", "Three"})
+  want := "one+two+three"
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}
+
+func TestMap(t *testing.T) {
+  got := CleanMap(map[string]string{"One": "Uno", "Two": "Dos", "Three": "Tres"})
+  want := "one-uno+two-dos+three-tres"
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}

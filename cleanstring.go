@@ -49,3 +49,28 @@ func Clean(str string) string {
 
   return trimmed
 }
+
+func CleanSlice(strs []string) string {
+  newStrs := make([]string, len(strs))
+  
+  for i, str := range strs {
+    newStrs[i] = Clean(str)
+  }
+
+  return strings.Join(newStrs, "+")
+}
+
+func CleanMap(strs map[string]string) string {
+  newStrs := make([]string, len(strs))
+
+  i := 0
+
+  for key, value := range strs {
+    cleanKey := Clean(key)
+    cleanValue := Clean(value)
+    newStrs[i] = cleanKey + "-" + cleanValue
+    i++
+  }
+
+  return strings.Join(newStrs, "+")
+}
