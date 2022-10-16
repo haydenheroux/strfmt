@@ -9,7 +9,7 @@ Alphanumeric characters are largely unaltered.
  - Numerals remain as their original value
 
 Punctuation is replaced by underscores.
- - Punctuation at either the head or tail is removed
+ - Punctuation at either the head or last is removed
  - All other non-alphanumeric characters become underscores
  - Multiple unbroken underscores become one underscore
 
