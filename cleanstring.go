@@ -14,14 +14,6 @@ func isNumber(r rune) bool {
   return '0' <= r && r <= '9'
 }
 
-func isAtHeadOrTail(i int, str string) bool {
-  return i == 0 || i == len(str)-1
-}
-
-func isInBody(i int, str string) bool {
-  return !isAtHeadOrTail(i, str)
-}
-
 func toLower(r rune) rune {
   lower := strings.ToLower(string(r))[0]
   return rune(lower)
@@ -30,34 +22,30 @@ func toLower(r rune) rune {
 func Clean(str string) string {
   var sb strings.Builder  
 
-  var newR rune
-  var prevR rune
+  var R rune
 
-  for i, r := range str {
+  for _, r := range str {
 
     if isAlpha(r) {
       // Transform alphabet character to lowercase
-      newR = toLower(r)
+      R = toLower(r)
     } else if isNumber(r) {
       // Keep original rune if it is a number
-      newR = r
+      R = r
     // All branches from here are non-alphanum cases
-    } else if isInBody(i, str) && prevR != '_' {
+    } else if R != '_' {
       // Include underscore if underscore was not the previous rune
-      newR = '_'
+      R = '_'
     } else {
       // Do not include multiple unbroken underscores, leaving one underscore
       continue
     }
 
-    prevR = newR
-
-    sb.WriteRune(newR)
+    sb.WriteRune(R)
   }
 
   newStr := sb.String()
   trimmed := strings.Trim(newStr, "_")
 
   return trimmed
-
 }

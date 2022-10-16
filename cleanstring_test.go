@@ -2,7 +2,7 @@ package cleanstring
 
 import "testing"
 
-func TestCleanSentence(t *testing.T) {
+func TestSentence(t *testing.T) {
   got := Clean("The quick brown fox jumps over the lazy dog.")
   want := "the_quick_brown_fox_jumps_over_the_lazy_dog"
   if got != want {
@@ -26,9 +26,33 @@ func TestUnbrokenNonAlphanumHead(t *testing.T) {
   }
 }
 
-func TestUnbrokenNonAlphanumTail(t *testing.T) {
+func TestUnbrokenNonAlphanumLast(t *testing.T) {
   got := Clean("What did you just say?!?!")
   want := "what_did_you_just_say"
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}
+
+func TestOnlyNonAlphanum(t *testing.T) {
+  got := Clean("???")
+  want := ""
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}
+
+func TestUnicode(t *testing.T) {
+  got := Clean("Hello 👋")
+  want := "hello"
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}
+
+func TestOnlyUnicode(t *testing.T) {
+  got := Clean("가다")
+  want := ""
   if got != want {
     t.Errorf("got: %s, want: %s", got, want)
   }
