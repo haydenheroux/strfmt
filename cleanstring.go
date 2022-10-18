@@ -4,21 +4,28 @@ import (
   "strings"
 )
 
+// isAlpha determines if the provided rune is part of the alphabet runes.
+// isAlpha checks if the rune is in either the lowercase or uppercase rune region.
 func isAlpha(r rune) bool {
   isUppercase := 'A' <= r && r <= 'Z'
   isLowercase := 'a' <= r && r <= 'z' 
   return isUppercase || isLowercase
 }
 
+// isNumber determines if the given rune is part of the numerical runes.
 func isNumber(r rune) bool {
   return '0' <= r && r <= '9'
 }
 
+// toLower returns the lowercased permutation of the provided rune.
 func toLower(r rune) rune {
   lower := strings.ToLower(string(r))[0]
   return rune(lower)
 }
 
+// Clean returns a string which is "cleanly formatted".
+// Alphanumeric characters are generally maintained.
+// Punctuation is substituted for underscores.
 func Clean(str string) string {
   var sb strings.Builder  
 
@@ -50,6 +57,9 @@ func Clean(str string) string {
   return trimmed
 }
 
+// CleanSlice returns the result of cleanly-formatting then joining a slice of strings.
+// Each string in the slice is first cleanly-formatted.
+// All strings are then joined using "+".
 func CleanSlice(strs []string) string {
   newStrs := make([]string, len(strs))
   
@@ -60,6 +70,10 @@ func CleanSlice(strs []string) string {
   return strings.Join(newStrs, "+")
 }
 
+// CleanMap returns the result of cleanly-formatting then joining a map of strings.
+// Each key and value in the slice is first cleanly-formatted.
+// All key-value pairs are then joined using "-".
+// All pairs are then joined using "+".
 func CleanMap(strs map[string]string) string {
   newStrs := make([]string, len(strs))
 
