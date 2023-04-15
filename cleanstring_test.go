@@ -1,6 +1,7 @@
 package cleanstring
 
 import "testing"
+import "strings"
 
 func TestSentence(t *testing.T) {
   got := Clean("The quick brown fox jumps over the lazy dog.")
@@ -69,6 +70,17 @@ func TestSlice(t *testing.T) {
 func TestMap(t *testing.T) {
   got := CleanMap(map[string]string{"One": "Uno", "Two": "Dos", "Three": "Tres"})
   want := "one-uno+two-dos+three-tres"
+  if got != want {
+    t.Errorf("got: %s, want: %s", got, want)
+  }
+}
+
+func TestBoth(t *testing.T) {
+  sl := CleanSlice(strings.Split("Alpha & Beta", "&"))
+  st := Clean("Gamma")
+  m := map[string]string{sl: st}
+  got := CleanMap(m)
+  want := "alpha+beta-gamma"
   if got != want {
     t.Errorf("got: %s, want: %s", got, want)
   }

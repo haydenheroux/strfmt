@@ -7,6 +7,7 @@ Library for cleanly-formatted permutations of strings.
 Alphanumeric characters are largely unaltered.
  - Alphabet characters are transformed to be lowercase only
  - Numerals remain as their original value
+ - '+' character remains (careful!)
 
 Punctuation is replaced by underscores.
  - Punctuation at either the head or last is removed

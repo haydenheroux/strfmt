@@ -36,7 +36,7 @@ func Clean(str string) string {
     if isAlpha(r) {
       // Transform alphabet character to lowercase
       R = toLower(r)
-    } else if isNumber(r) {
+    } else if isNumber(r) || r == '+' {
       // Keep original rune if it is a number
       R = r
     // All branches from here are non-alphanum cases
