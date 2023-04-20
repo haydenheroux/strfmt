@@ -12,9 +12,14 @@ func isAlpha(r rune) bool {
   return isUppercase || isLowercase
 }
 
-// isNumber determines if the given rune is part of the numerical runes.
+// isNumber determines if the provided rune is part of the numerical runes.
 func isNumber(r rune) bool {
   return '0' <= r && r <= '9'
+}
+
+// isSpecial determines if r is a non-alphanumeric rune exempt from being replaced by an underscore.
+func isSpecial(r rune) bool {
+	return strings.IndexRune("+", r) != -1
 }
 
 // toLower returns the lowercased permutation of the provided rune.
@@ -36,12 +41,10 @@ func Clean(str string) string {
     if isAlpha(r) {
       // Transform alphabet character to lowercase
       R = toLower(r)
-    } else if isNumber(r) || r == '+' {
+    } else if isNumber(r) || isSpecial(r) {
       // Keep original rune if it is a number
       R = r
-    // All branches from here are non-alphanum cases
     } else if R != '_' {
-      // Include underscore if underscore was not the previous rune
       R = '_'
     } else {
       // Do not include multiple unbroken underscores, leaving one underscore
