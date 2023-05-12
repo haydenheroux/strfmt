@@ -1,6 +1,6 @@
 # Clean String
 
-A string-parsing library for creating permutations of strings without spaces, Unicode, and other bloat. Supports the creation of list and map string representation.
+A string-parsing library for creating permutations of strings without spaces, Unicode, and other bloat. Creates string representations of slices and maps.
 
 ## Rules
  - Alphabetical characters become lowercase
