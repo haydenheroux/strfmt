@@ -1,3 +1,3 @@
-module github.com/haydenheroux/cleanstring
+module github.com/haydenheroux/strfmt
 
 go 1.19

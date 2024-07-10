@@ -1,4 +1,4 @@
-package cleanstring
+package strfmt 
 
 import "testing"
 import "strings"
