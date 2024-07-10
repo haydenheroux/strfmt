@@ -4,39 +4,62 @@ import (
 	"strings"
 )
 
-// isAlpha determines if the provided rune is part of the alphabet runes.
-// isAlpha checks if the rune is in either the lowercase or uppercase rune region.
-func isAlpha(r rune) bool {
-	isUppercase := 'A' <= r && r <= 'Z'
-	isLowercase := 'a' <= r && r <= 'z'
-	return isUppercase || isLowercase
+// isLower returns true if the rune is in the ASCII lowercase range.
+func isLower(r rune) bool {
+    return 'a' <= r && r <= 'z'
 }
 
-// isNumber determines if the provided rune is part of the numerical runes.
+// isUpper returns true if the rune is in the ASCII uppercase range.
+func isUpper(r rune) bool {
+    return 'A' <= r && r <= 'Z'
+}
+
+// isAlpha returns true if the rune is in the ASCII alphabet range.
+func isAlpha(r rune) bool {
+    return isLower(r) || isUpper(r)
+}
+
+// isNumber returns true if the rune is in the ASCII number range.
 func isNumber(r rune) bool {
 	return '0' <= r && r <= '9'
 }
 
-// isSpecial determines if r is a non-alphanumeric rune exempt from being replaced by an underscore.
-func isSpecial(r rune) bool {
-	return strings.ContainsAny(string(r), "+")
+// matches returns true if the rune matches any of the test runes.
+func matches(r rune, tests []rune) bool {
+    for _, test := range tests {
+        if r == test {
+            return true
+        }
+    }
+
+    return false
 }
 
-// skip determines if r should skipped.
+// keep returns true if the rune should be kept.
+// Kept runes would be replaced but are not.
+func keep(r rune) bool {
+    return matches(r, []rune{'+'})
+}
+
+// skip returns true if the rune should be skipped.
+// Skipped runes are not included in the output string and are not replaced.
 func skip(r rune) bool {
-    return strings.ContainsAny(string(r), "'")
+    return matches(r, []rune{'\''})
 }
 
-// toLower returns the lowercased permutation of the provided rune.
+// toLower lowercases the rune if it is uppercase.
+// Any non-uppercase rune will be returned as-is.
 func toLower(r rune) rune {
-	lower := strings.ToLower(string(r))[0]
-	return rune(lower)
+    if !isUpper(r) {
+        return r
+    }
+
+    delta := r - 'A'
+    return 'a' + delta
 }
 
-// Clean returns a string which is "cleanly formatted".
-// Alphanumeric characters are generally maintained.
-// Punctuation is substituted for underscores.
-func Clean(str string) string {
+// Format formats a string.
+func Format(str string) string {
 	var sb strings.Builder
 
 	var R rune
@@ -46,53 +69,59 @@ func Clean(str string) string {
 		if isAlpha(r) {
 			// Transform alphabet character to lowercase
 			R = toLower(r)
-		} else if isNumber(r) || isSpecial(r) {
+		} else if isNumber(r) || keep(r) {
 			// Keep original rune if it is a number
 			R = r
-		} else if R != '_' && !skip(r) {
-			R = '_'
-		} else {
-			// Do not include multiple unbroken underscores, leaving one underscore
+		} else if skip(r) || R == '_' {
+			// Do not include multiple unbroken underscores
 			continue
+		} else {
+            // Replace character with an underscore
+			R = '_'
 		}
 
 		sb.WriteRune(R)
 	}
 
-	newStr := sb.String()
-	trimmed := strings.Trim(newStr, "_")
+	result := sb.String()
+	trimmed := strings.Trim(result, "_")
 
 	return trimmed
 }
 
-// CleanSlice returns the result of cleanly-formatting then joining a slice of strings.
-// Each string in the slice is first cleanly-formatted.
-// All strings are then joined using "+".
-func CleanSlice(strs []string) string {
-	newStrs := make([]string, len(strs))
-
-	for i, str := range strs {
-		newStrs[i] = Clean(str)
-	}
-
-	return strings.Join(newStrs, "+")
+// join joins multiple strings.
+func join(strs []string) string {
+    return strings.Join(strs, "+")
 }
 
-// CleanMap returns the result of cleanly-formatting then joining a map of strings.
-// Each key and value in the slice is first cleanly-formatted.
-// All key-value pairs are then joined using "-".
-// All pairs are then joined using "+".
-func CleanMap(strs map[string]string) string {
-	newStrs := make([]string, len(strs))
+// Join formats and joins strings.
+func Join(strs []string) string {
+	formatted := make([]string, len(strs))
+
+	for i, str := range strs {
+		formatted[i] = Format(str)
+	}
+
+	return join(formatted)
+}
+
+// associate associates two strings.
+func associate(k, v string) string {
+    return k + "-" + v
+}
+
+// Associate formats, associates, and joins strings.
+func Associate(strs map[string]string) string {
+	formatted := make([]string, len(strs))
 
 	i := 0
 
-	for key, value := range strs {
-		cleanKey := Clean(key)
-		cleanValue := Clean(value)
-		newStrs[i] = cleanKey + "-" + cleanValue
+	for k, v := range strs {
+        K := Format(k)
+        V := Format(v)
+		formatted[i] = associate(K, V)
 		i++
 	}
 
-	return strings.Join(newStrs, "+")
+	return join(formatted)
 }
