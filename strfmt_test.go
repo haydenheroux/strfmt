@@ -92,10 +92,10 @@ func TestMap(t *testing.T) {
 }
 
 func TestBoth(t *testing.T) {
-	sl := Join(strings.Split("Alpha & Beta", "&"))
-	st := Format("Gamma")
-	m := map[string]string{sl: st}
-	got := Associate(m)
+	ks := strings.Split("Alpha & Beta", "&")
+    K := Join(ks)
+    v := "Gamma"
+    got := Associate(map[string]string{K: v})
 	want := "alpha+beta-gamma"
 	if got != want {
 		t.Errorf("got: %s, want: %s", got, want)
